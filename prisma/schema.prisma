@@ -1,0 +1,48 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  id          String   @id @default(uuid())
+  category    String
+  brand       String
+  price       String
+  title       String
+  rating      String
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Define a one-to-many relationship with the Image model
+  images   Image[]
+  // Define a one-to-many relationship with the Feature model
+  features Feature[]
+
+  @@map("products")
+}
+
+model Image {
+  id        String  @id @default(uuid())
+  url       String
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+
+  @@map("image")
+}
+
+model Feature {
+  id        String  @id @default(uuid())
+  features  String
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+
+  @@map("features")
+}
