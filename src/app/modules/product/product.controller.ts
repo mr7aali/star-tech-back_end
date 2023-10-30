@@ -1,4 +1,4 @@
-import { Product } from '@prisma/client';
+
 import { Request, Response } from "express";
 import catchAsync from "../../../shared/catchAsync";
 import sendResponse from "../../../shared/sendResponse";
@@ -6,11 +6,14 @@ import { ProductService } from './product.service';
 
 const create = catchAsync(
     async (req: Request, res: Response) => {
-        const data = req.body;
-    
 
-        
-        const result = await ProductService.create(data);
+
+
+        const { product, ...spacificationData } = req.body;
+        const result = await ProductService.create({ product, spacificationData });
+
+
+
 
         sendResponse<any>(res, {
             statusCode: 200,
@@ -18,6 +21,9 @@ const create = catchAsync(
             message: "Product created successfully!",
             data: result
         })
+
+
+
     }
 );
 

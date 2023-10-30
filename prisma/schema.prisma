@@ -28,6 +28,8 @@ model Product {
   key_features String[]
   image        String[]
 
+
+
   Specification Specification?
 
   @@map("products")
@@ -53,6 +55,8 @@ model Display {
   touch_screen     String
   refresh_rate     String
   features         String
+
+  
 
   specification Specification @relation(fields: [specification_id], references: [id])
 }

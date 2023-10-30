@@ -3,34 +3,31 @@ import { prisma } from "../../../shared/prisma"
 import { IProductCreatingData } from "./product.interface"
 
 
-const create = async (data: IProductCreatingData): Promise<any | null> => {
+const create = async ({ product, spacificationData }: { product: Product, spacificationData: IProductCreatingData }): Promise<any | null> => {
 
 
 
     const productID = await prisma.$transaction(async (tx) => {
+
         //! product created
-        const productResult = await tx.product.create({ data: data.Product })
+        const productResult = await tx.product.create({ data: product })
 
         //! specification created
         const specificationResult = await tx.specification.create({
             data: { product_id: productResult.id }
         })
+        const specification_id = Number(specificationResult.id)
 
-        const specifaicationId = Number(specificationResult.id)
 
-        //! display created
-        await tx.display.create({
-            data: {
-                ...data.Display, specification_id: specifaicationId
-            }
-        })
-        //! processor created
-        await tx.processor.create({
-            data: {
-                ...data.Processor, specification_id: specifaicationId
-            }
-        })
 
+        for (const [tableName, recordData] of Object.entries(spacificationData)) {
+            const recordDataWithForeignKey = { ...recordData, specification_id }
+            await (tx as any)[tableName].create({
+                data: recordDataWithForeignKey
+            });
+        }
+
+    
 
         return productResult.id;
 
@@ -52,12 +49,8 @@ const create = async (data: IProductCreatingData): Promise<any | null> => {
             }
         }
     })
-    console.log(result);
+
     return result
-
-
-
-
 }
 
 export const ProductService = {
