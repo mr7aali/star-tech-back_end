@@ -28,14 +28,14 @@ model Product {
   key_features String[]
   image        String[]
 
-  Specification Specification[]
+  Specification Specification?
 
   @@map("products")
 }
 
 model Specification {
   id         Int @id @default(autoincrement())
-  product_id Int
+  product_id Int @unique
 
   product Product @relation(fields: [product_id], references: [id])
 

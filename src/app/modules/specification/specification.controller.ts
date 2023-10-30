@@ -7,9 +7,10 @@ import { SpecificationService } from "./specification.service";
 const create = catchAsync(
     async (req: Request, res: Response) => {
         const data = req.body;
+
         const product_id = data.product_id
         const displayData = data.Display;
-        const processorData = data.Processor
+        const processorData = data.Processor;
 
   
         const result = await SpecificationService.create({product_id, displayData, processorData });
