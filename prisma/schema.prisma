@@ -10,27 +10,24 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
-model User{
-  id Int @id @default(autoincrement())
+model User {
+  id         Int    @id @default(autoincrement())
   first_name String
-  last_name String
-  phone String
-  email String 
+  last_name  String
+  phone      String
+  email      String
 }
 
-
-
-
 model Product {
-  id            Int             @id @default(autoincrement())
-  name          String
-  price         Int
-  status        String
-  product_code  String
-  brand         String
-  key_features  String[]
-  image         String[]
+  id           Int      @id @default(autoincrement())
+  name         String
+  price        Int
+  status       String
+  product_code String
+  brand        String
+  key_features String[]
+  image        String[]
+
   Specification Specification[]
 
   @@map("products")
@@ -40,27 +37,28 @@ model Specification {
   id         Int @id @default(autoincrement())
   product_id Int
 
-  product   Product     @relation(fields: [product_id], references: [id])
-  Display   Display[]
-  Processor Processor[]
+  product Product @relation(fields: [product_id], references: [id])
+
+
+  Display   Display?
+  Processor Processor?
 }
 
 model Display {
   id               Int    @id @default(autoincrement())
+  specification_id Int    @unique
   size             String
   type             String
   resolution       String
   touch_screen     String
   refresh_rate     String
   features         String
-  specification_id Int
 
   specification Specification @relation(fields: [specification_id], references: [id])
 }
 
 model Processor {
-  id Int @id @default(autoincrement())
-
+  id               Int    @id @default(autoincrement())
   brand            String
   model            String
   generation       String
@@ -68,7 +66,7 @@ model Processor {
   core             String
   thread           String
   cpu_cache        String
-  specification_id Int
+  specification_id Int    @unique
 
   specification Specification @relation(fields: [specification_id], references: [id])
 }
