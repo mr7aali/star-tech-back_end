@@ -10,39 +10,65 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Product {
-  id          String   @id @default(uuid())
-  category    String
-  brand       String
-  price       String
-  title       String
-  rating      String
-  description String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
 
-  // Define a one-to-many relationship with the Image model
-  images   Image[]
-  // Define a one-to-many relationship with the Feature model
-  features Feature[]
+model User{
+  id Int @id @default(autoincrement())
+  first_name String
+  last_name String
+  phone String
+  email String 
+}
+
+
+
+
+model Product {
+  id            Int             @id @default(autoincrement())
+  name          String
+  price         Int
+  status        String
+  product_code  String
+  brand         String
+  key_features  String[]
+  image         String[]
+  Specification Specification[]
 
   @@map("products")
 }
 
-model Image {
-  id        String  @id @default(uuid())
-  url       String
-  productId String
-  product   Product @relation(fields: [productId], references: [id])
+model Specification {
+  id         Int @id @default(autoincrement())
+  product_id Int
 
-  @@map("image")
+  product   Product     @relation(fields: [product_id], references: [id])
+  Display   Display[]
+  Processor Processor[]
 }
 
-model Feature {
-  id        String  @id @default(uuid())
-  features  String
-  productId String
-  product   Product @relation(fields: [productId], references: [id])
+model Display {
+  id               Int    @id @default(autoincrement())
+  size             String
+  type             String
+  resolution       String
+  touch_screen     String
+  refresh_rate     String
+  features         String
+  specification_id Int
 
-  @@map("features")
+  specification Specification @relation(fields: [specification_id], references: [id])
+}
+
+model Processor {
+  id Int @id @default(autoincrement())
+
+  brand            String
+  model            String
+  generation       String
+  frequency        String
+  core             String
+  thread           String
+  cpu_cache        String
+  specification_id Int
+
+  specification Specification @relation(fields: [specification_id], references: [id])
 }
