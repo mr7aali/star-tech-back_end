@@ -29,8 +29,6 @@ const profile = catchAsync(
             data: result,
         })
     })
-
-
 const getAll = catchAsync(
     async (req: Request, res: Response) => {
 

@@ -11,11 +11,13 @@ datasource db {
 }
 
 model User {
-  id         String    @id @default(uuid())
+  id         String @id @default(uuid())
   first_name String
   last_name  String
   phone      String
-  email      String
+  email      String @unique
+  passwoard  String
+  role       String @default("user")
 }
 
 model Product {
@@ -28,8 +30,6 @@ model Product {
   key_features String[]
   image        String[]
 
-
-
   Specification Specification?
 
   @@map("products")
@@ -40,7 +40,6 @@ model Specification {
   product_id Int @unique
 
   product Product @relation(fields: [product_id], references: [id])
-
 
   Display   Display?
   Processor Processor?
@@ -55,8 +54,6 @@ model Display {
   touch_screen     String
   refresh_rate     String
   features         String
-
-  
 
   specification Specification @relation(fields: [specification_id], references: [id])
 }

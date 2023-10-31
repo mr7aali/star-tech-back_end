@@ -17,12 +17,9 @@ const profile = async (id: string): Promise<User | null> => {
 
     return result;
 }
-const getAll = async (): Promise<User[] > => {
+const getAll = async (): Promise<User[]> => {
 
-    const result = await prisma.user.findMany({
-
-
-    });
+    const result = await prisma.user.findMany({});
 
     return result;
 }
