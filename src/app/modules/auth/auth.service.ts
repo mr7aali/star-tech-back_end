@@ -1,9 +1,10 @@
+import { verifyToken } from './../../../helpers/jwtHelper';
 import { User } from "@prisma/client"
 import { prisma } from "../../../shared/prisma"
 import { createToken } from "../../../helpers/jwtHelper";
 import { ILoginResponse } from "./auth.interface";
-
-const login = async (data: User):Promise<ILoginResponse> => {
+import jwt, { JwtPayload } from "jsonwebtoken";
+const login = async (data: User): Promise<ILoginResponse> => {
     const isUserExists = await prisma.user.findUnique({
         where: {
             email: data.email,
@@ -15,20 +16,20 @@ const login = async (data: User):Promise<ILoginResponse> => {
         }
     });
 
-    if(!isUserExists){
+    if (!isUserExists) {
         throw new Error("User does not exists");
     }
 
 
 
-    
+
     const Tokendata = {
         role: isUserExists.role,
         id: isUserExists.id,
     }
 
 
-    const accessToken = createToken(Tokendata, "access_Token_secret", { expiresIn: '200d' });
+    const accessToken = createToken(Tokendata, "access_Token_secret", { expiresIn: '10d' });
     const refreshToken = createToken(Tokendata, "refreshToken_secret", { expiresIn: "365d" });
 
 
@@ -39,9 +40,34 @@ const login = async (data: User):Promise<ILoginResponse> => {
     };
 
 }
+const refreshToken = async (token: string): Promise<ILoginResponse> => {
+    const decodedUserInfo = jwt.verify(token, 'refreshToken_secret') as JwtPayload;
+    // const decodedUserInfo = verifyToken(token, 'refreshToken_secret')
 
+    if (decodedUserInfo && 'id' in decodedUserInfo) {
+        const isUserExists = await prisma.user.findUnique({
+            where: {
+                id: decodedUserInfo.id
+            }
+        })
+        if (!isUserExists) {
+            throw new Error("User does not exist");
+        }
+    }
+
+
+    const tokenData = {
+        role: decodedUserInfo.role,
+        id: decodedUserInfo.id
+    }
+
+    const accessToken = createToken(tokenData, "access_Token_secret", { expiresIn: '10d' });
+    return {
+        accessToken
+    }
+}
 
 export const AuthService = {
-    login
+    login, refreshToken
 }
 

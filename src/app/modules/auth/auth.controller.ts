@@ -21,7 +21,7 @@ const login = catchAsync(
         };
         res.cookie("refreshToken", result.refreshToken, cookieOption);
 
-        
+
         sendResponse(res, {
             statusCode: StatusCodes.OK,
             success: true,
@@ -32,7 +32,21 @@ const login = catchAsync(
         });
     }
 )
+const refreshToken = catchAsync(
+    async (req: Request, res: Response) => {
+        const refreshToken = req.cookies.refreshToken;
+        const result = await AuthService.refreshToken(refreshToken);
 
+        sendResponse(res, {
+            statusCode: StatusCodes.OK,
+            success: true,
+            message: "refreshToken created successfully",
+            data: {
+                accessToken: result.accessToken
+            }
+        });
+    }
+)
 export const AuthController = {
-    login
+    login, refreshToken
 }
