@@ -1,38 +1,20 @@
-
-import { PrismaClientValidationError } from "@prisma/client/runtime/library";
-import { IGenericErrorMessage, IGenericErrorResponse } from "./interface";
-import { StatusCodes } from "http-status-codes";
-
-
-
-
-type IValidation =
-    { target: string[] }
+import { PrismaClientValidationError } from '@prisma/client/runtime/library';
+import { error } from 'console';
+import { IGenericErrorResponse } from './interface';
+import { StatusCodes } from 'http-status-codes';
 const handleValidationError = (error: PrismaClientValidationError): IGenericErrorResponse => {
+    const missignField = error.message.split('\n').find((line) => line.includes('Argument'));
     let errors = [{
         path: "",
-        message: error.message,
-    }]
-
-    if ('meta' in error) {
-
-        const errorWithTargetFilds = error.meta as IValidation;
-        errors = errorWithTargetFilds.target.map(field => {
-            const capitalizedField = field.charAt(0).toUpperCase() + field.slice(1);
-            return {
-                path: "",
-                message: `${capitalizedField} is already exists!`
-            }
-        })
-    }
-
-
+        message: missignField || "",
+    }];
     return {
         statusCode: StatusCodes.BAD_REQUEST,
-        message: 'Validation Error',
-        // message: message,
+        message: error.name,
         errorMessages: errors
     }
 }
+
+
 
 export default handleValidationError;
