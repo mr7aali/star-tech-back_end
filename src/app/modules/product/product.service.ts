@@ -37,9 +37,9 @@ const create = async ({ product, spacificationData }: { product: Product, spacif
         include: {
             Specification: {
                 include: {
-                    Display: true,
+                    display: true,
                     product: true,
-                    Processor: true
+                    processor: true
 
                 }
             }
@@ -59,6 +59,41 @@ const getAll = async () => {
 
     return result;
 }
+const getSingle = async (id: string) => {
+    // const result = await prisma.product.findUnique({
+    //     where: {
+    //         id: Number(id)
+    //     },
+    //     include: {
+    //         Specification: {
+    //             include: {
+    //                 Display: true,
+    //                 Processor: true,
+    //                 product: true
+    //             }
+    //         }
+
+
+    //     }
+    // });
+    const result = await prisma.specification.findUnique({
+        where: {
+            product_id: Number(id)
+        },
+        include: {
+            product: true,
+            display: true,
+            processor: true
+
+        }
+    });
+
+
+
+
+
+    return result;
+}
 export const ProductService = {
-    create, getAll
+    create, getAll, getSingle
 }

@@ -32,10 +32,20 @@ const getAll = catchAsync(
             data: result
         })
     }
+)
+const getSingle = catchAsync(
+    async (req: Request, res: Response) => {
+        const id = req.params.id;
+        const result = await ProductService.getSingle(id);
 
-
-
+        sendResponse(res, {
+            success: true,
+            statusCode: StatusCodes.OK,
+            message: "Product get successfully!",
+            data: result
+        })
+    }
 )
 export const ProductController = {
-    create, getAll
+    create, getAll, getSingle
 }

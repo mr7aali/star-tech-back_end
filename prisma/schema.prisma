@@ -41,8 +41,8 @@ model Specification {
 
   product Product @relation(fields: [product_id], references: [id])
 
-  Display   Display?
-  Processor Processor?
+  display   Display?
+  processor Processor?
 }
 
 model Display {
