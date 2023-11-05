@@ -1,5 +1,4 @@
 import { PrismaClientValidationError } from '@prisma/client/runtime/library';
-import { error } from 'console';
 import { IGenericErrorResponse } from './interface';
 import { StatusCodes } from 'http-status-codes';
 const handleValidationError = (error: PrismaClientValidationError): IGenericErrorResponse => {

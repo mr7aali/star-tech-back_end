@@ -18,6 +18,7 @@ app.use(cookieParser());
 
 //route
 app.use("/api/v1", router);
+
 // global error handeler 
 
 app.use(globalErrorHandler);

@@ -3,6 +3,7 @@ import catchAsync from "../../../shared/catchAsync"
 import sendResponse from "../../../shared/sendResponse";
 import { StatusCodes } from "http-status-codes"
 import { AuthService } from "./auth.service";
+import CustomError from "../../../errors/CustomError";
 
 
 
@@ -35,6 +36,10 @@ const login = catchAsync(
 const refreshToken = catchAsync(
     async (req: Request, res: Response) => {
         const refreshToken = req.cookies.refreshToken;
+
+        if (!refreshToken) {
+            throw new CustomError(StatusCodes.FORBIDDEN, "Refresh Token not found!")
+        }
         const result = await AuthService.refreshToken(refreshToken);
 
         sendResponse(res, {

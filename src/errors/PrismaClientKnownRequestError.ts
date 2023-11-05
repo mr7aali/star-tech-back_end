@@ -10,7 +10,7 @@ type IValidation =
     { target: string[] }
 const PrismaClientError = (error: PrismaClientKnownRequestError): IGenericErrorResponse => {
     let errors = [{
-        path: "",
+        path: error.code,
         message: error.message,
     }]
 

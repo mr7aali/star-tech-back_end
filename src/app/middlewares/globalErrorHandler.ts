@@ -3,6 +3,8 @@ import { IGenericErrorMessage } from "../../errors/interface";
 import { PrismaClientKnownRequestError, PrismaClientValidationError } from "@prisma/client/runtime/library";
 import PrismaClientError from "../../errors/PrismaClientKnownRequestError";
 import handleValidationError from "../../errors/handleValidationError";
+import { JsonWebTokenError } from "jsonwebtoken";
+import CustomError from "../../errors/CustomError";
 
 const globalErrorHandler: ErrorRequestHandler = (
     error,
@@ -29,7 +31,21 @@ const globalErrorHandler: ErrorRequestHandler = (
         errorMessages = simplifiedError.errorMessages
 
     }
-
+    else if (error instanceof JsonWebTokenError) {
+        message = 'Invalid JWT token!'
+    }
+    else if (error instanceof CustomError) {
+        statusCode = error?.statusCode;
+        message = error.message;
+        errorMessages = error?.message
+            ? [
+                {
+                    path: '',
+                    message: error?.message,
+                },
+            ]
+            : [];
+    }
 
     res.status(statusCode).json({
         success: false,

@@ -1,7 +1,7 @@
 
 class CustomError  extends Error {
     statusCode: number
-    constructor(StatusCode: number, message: string, stack: "") {
+    constructor(StatusCode: number, message: string, stack?: "") {
         super(message)
         this.statusCode = StatusCode
         if (stack) {

@@ -4,6 +4,8 @@ import { prisma } from "../../../shared/prisma"
 import { createToken } from "../../../helpers/jwtHelper";
 import { ILoginResponse } from "./auth.interface";
 import jwt, { JwtPayload } from "jsonwebtoken";
+import CustomError from '../../../errors/CustomError';
+import { StatusCodes } from 'http-status-codes';
 const login = async (data: User): Promise<ILoginResponse> => {
     const isUserExists = await prisma.user.findUnique({
         where: {
@@ -17,7 +19,7 @@ const login = async (data: User): Promise<ILoginResponse> => {
     });
 
     if (!isUserExists) {
-        throw new Error("User does not exists");
+        throw new CustomError(StatusCodes.NOT_FOUND, "User does not exists");
     }
 
 
@@ -42,7 +44,6 @@ const login = async (data: User): Promise<ILoginResponse> => {
 }
 const refreshToken = async (token: string): Promise<ILoginResponse> => {
     const decodedUserInfo = jwt.verify(token, 'refreshToken_secret') as JwtPayload;
-    // const decodedUserInfo = verifyToken(token, 'refreshToken_secret')
 
     if (decodedUserInfo && 'id' in decodedUserInfo) {
         const isUserExists = await prisma.user.findUnique({

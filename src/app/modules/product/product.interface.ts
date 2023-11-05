@@ -1,7 +1,6 @@
 import { Display, Processor, Product } from "@prisma/client"
 
-export type IProductCreatingData = {
-   
+export type IProductCreatingData = {  
     Display?: Display;
     Processor?: Processor;
 }

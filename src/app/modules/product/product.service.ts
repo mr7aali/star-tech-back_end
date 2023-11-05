@@ -1,6 +1,8 @@
 import { Display, Processor, Product, Specification } from "@prisma/client"
 import { prisma } from "../../../shared/prisma"
 import { IProductCreatingData } from "./product.interface"
+import CustomError from "../../../errors/CustomError"
+import { StatusCodes } from "http-status-codes"
 
 
 const create = async ({ product, spacificationData }: { product: Product, spacificationData: IProductCreatingData }): Promise<any | null> => {
@@ -26,14 +28,8 @@ const create = async ({ product, spacificationData }: { product: Product, spacif
                 data: recordDataWithForeignKey
             });
         }
-
-    
-
         return productResult.id;
-
     })
-
-
     const result = await prisma.product.findUnique({
         where: {
             id: productID
@@ -53,6 +49,16 @@ const create = async ({ product, spacificationData }: { product: Product, spacif
     return result
 }
 
+const getAll = async () => {
+    const result = await prisma.product.findMany({});
+
+
+    if (!result.length) {
+        throw new CustomError(StatusCodes.NOT_FOUND, "Product not found!")
+    }
+
+    return result;
+}
 export const ProductService = {
-    create
+    create, getAll
 }
