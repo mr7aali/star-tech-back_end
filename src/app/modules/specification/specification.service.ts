@@ -1,7 +1,7 @@
 
 import { Display, Processor, Specification } from '@prisma/client';
 import { prisma } from '../../../shared/prisma';
-import { error } from 'console';
+
 
 
 const create = async (
@@ -49,8 +49,8 @@ const create = async (
             id: specificationID
         },
         include: {
-            Display: true,
-            Processor: true
+            display: true,
+            processor: true
         }
     })
     console.log(result);
