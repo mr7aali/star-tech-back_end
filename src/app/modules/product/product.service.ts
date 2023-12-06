@@ -1,3 +1,4 @@
+import { prisma } from './../../../shared/prisma';
 import { Display, Processor, Product, Specification } from "@prisma/client"
 import { prisma } from "../../../shared/prisma"
 import { IProductCreatingData } from "./product.interface"
@@ -83,13 +84,34 @@ const getSingle = async (id: string) => {
         include: {
             product: true,
             display: true,
-            processor: true
+            processor: true,
+            Audio: true,
+            Camera: true,
+            Connectivity: true,
+            FrontCamera: true,
+            Graphics: true,
+            Keyboard: true,
+            Memory: true,
+            NetworkConnectivity: true,
+            Os: true,
+            PhysicalSpecification: true,
+            PortsSlots: true,
+            Power: true,
+            RearCamera: true,
+            Security: true,
+            Storage: true
 
         }
     });
 
 
+    for (const key in result) {
+        if ((result as any)[key] === null || (result as any)[key] === undefined) {
+            delete (result as any)[key]
+        }
 
+
+    }
 
 
     return result;

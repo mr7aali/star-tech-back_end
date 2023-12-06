@@ -29,7 +29,7 @@ model Product {
   brand         String
   key_features  String[]
   image         String[]
-  warranty      String
+  warranty      String @default("No Warranty")
   Specification Specification?
 
   @@map("products")
