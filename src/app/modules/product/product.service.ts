@@ -1,5 +1,4 @@
-import { prisma } from './../../../shared/prisma';
-import { Display, Processor, Product, Specification } from "@prisma/client"
+import { Product } from "@prisma/client"
 import { prisma } from "../../../shared/prisma"
 import { IProductCreatingData } from "./product.interface"
 import CustomError from "../../../errors/CustomError"
@@ -100,7 +99,6 @@ const getSingle = async (id: string) => {
             RearCamera: true,
             Security: true,
             Storage: true
-
         }
     });
 
