@@ -115,8 +115,6 @@ const getSingle = async (id: string) => {
         }
     }
 
-
-
     return result
 }
 
