@@ -29,7 +29,7 @@ model Product {
   brand         String
   key_features  String[]
   image         String[]
-  warranty      String @default("No Warranty")
+  warranty      String         @default("No Warranty")
   Specification Specification?
 
   @@map("products")
@@ -41,24 +41,23 @@ model Specification {
 
   product Product @relation(fields: [product_id], references: [id])
 
-  display               Display?
-  processor             Processor?
-  Audio                 Audio?
-  Connectivity          Connectivity?
-  Power                 Power?
-  Memory                Memory?
-  Storage               Storage?
-  Graphics              Graphics?
-  Keyboard              Keyboard?
-  Camera                Camera?
-  PortsSlots            PortsSlots?
-  Security              Security?
-  PhysicalSpecification PhysicalSpecification?
-  RearCamera            RearCamera?
-  FrontCamera           FrontCamera?
-  NetworkConnectivity   NetworkConnectivity?
-  Os                    Os?
-
+  Display                Display?
+  Processor              Processor?
+  Audio                  Audio?
+  Connectivity           Connectivity?
+  Power                  Power?
+  Memory                 Memory?
+  Storage                Storage?
+  Graphics               Graphics?
+  Keyboard               Keyboard?
+  Camera                 Camera?
+  Ports_Slots            PortsSlots?
+  Security               Security?
+  Physical_Specification PhysicalSpecification?
+  Rear_Camera            RearCamera?
+  Front_Camera           FrontCamera?
+  Network_Connectivity   NetworkConnectivity?
+  Os                     Os?
 
   @@map("specification")
 }
@@ -74,7 +73,6 @@ model Display {
   features         String
 
   specification Specification @relation(fields: [specification_id], references: [id])
-
 }
 
 model Processor {
@@ -100,6 +98,7 @@ model Audio {
 
   specification_id Int           @unique
   specification    Specification @relation(fields: [specification_id], references: [id])
+
   @@map("audio")
 }
 
@@ -110,6 +109,7 @@ model Connectivity {
 
   specification_id Int           @unique
   specification    Specification @relation(fields: [specification_id], references: [id])
+
   @@map("connectivity")
 }
 
@@ -120,6 +120,7 @@ model Power {
 
   specification_id Int           @unique
   specification    Specification @relation(fields: [specification_id], references: [id])
+
   @@map("power")
 }
 
@@ -173,6 +174,7 @@ model Keyboard {
 
   specification_id Int           @unique
   specification    Specification @relation(fields: [specification_id], references: [id])
+
   @@map("keyboard")
 }
 
@@ -186,6 +188,7 @@ model Camera {
 
   specification_id Int           @unique
   specification    Specification @relation(fields: [specification_id], references: [id])
+
   @@map("camera")
 }
 
@@ -203,6 +206,7 @@ model PortsSlots {
 
   specification_id Int           @unique
   specification    Specification @relation(fields: [specification_id], references: [id])
+
   @@map("prots_slots")
 }
 
@@ -214,6 +218,7 @@ model Security {
 
   specification_id Int           @unique
   specification    Specification @relation(fields: [specification_id], references: [id])
+
   @@map("security")
 }
 
@@ -226,6 +231,7 @@ model PhysicalSpecification {
 
   specification_id Int           @unique
   specification    Specification @relation(fields: [specification_id], references: [id])
+
   @@map("physical_specificaion")
 }
 
@@ -280,5 +286,6 @@ model Os {
 
   specification_id Int           @unique
   specification    Specification @relation(fields: [specification_id], references: [id])
+
   @@map("os")
 }
