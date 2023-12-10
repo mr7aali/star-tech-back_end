@@ -37,9 +37,9 @@ const create = async ({ product, spacificationData }: { product: Product, spacif
         include: {
             Specification: {
                 include: {
-                    display: true,
+                    Display: true,
                     product: true,
-                    processor: true
+                    Processor: true
 
                 }
             }
@@ -68,33 +68,33 @@ const getSingle = async (id: string) => {
             Specification: {
                 include: {
                     // product: true,
-                    display: {
+                    Display: {
                         select: {
                             id: false,
                             specification_id: false,
                             // Include other fields you need
-                            size: true,
-                            type: true,
-                            resolution: true,
-                            touch_screen: true,
-                            refresh_rate: true,
-                            features: true
+                            Size: true,
+                            Type: true,
+                            Resolution: true,
+                            Touch_Screen: true,
+                            Refresh_Rate: true,
+                            Features: true,
 
                         }
                     },
 
-                    processor: {
+                    Processor: {
                         select: {
                             id: false,
                             specification_id: false,
 
-                            brand: true,
-                            model: true,
-                            generation: true,
-                            frequency: true,
-                            core: true,
-                            thread: true,
-                            cpu_cache: true,
+                            Brand: true,
+                            Model: true,
+                            Generation: true,
+                            Frequency: true,
+                            Core: true,
+                            Thread: true,
+                            Cpu_cache: true,
                         }
                     },
                     Audio: {
@@ -102,8 +102,8 @@ const getSingle = async (id: string) => {
                             id: false,
                             specification_id: false,
 
-                            speaker_BuiltIn: true,
-                            speaker_details: true,
+                            Speaker: true,
+                            Speaker_Details: true
                         }
                     },
                     Camera: {
@@ -111,10 +111,10 @@ const getSingle = async (id: string) => {
                             id: false,
                             specification_id: false,
 
-                            audioFeature: true,
-                            microphone: true,
-                            speaker: true,
-                            webCam: true
+                            Web_Cam: true,
+                            Speaker: true,
+                            Microphone: true,
+                            Audio_Feature: true,
                         }
                     },
                     Connectivity: {
@@ -122,35 +122,35 @@ const getSingle = async (id: string) => {
                             id: false,
                             specification_id: false,
 
-                            display_port: true,
-                            hdmi: true,
+                            Display_Port: true,
+                            HDMI: true,
                         }
                     },
-                    FrontCamera: {
+                    Front_Camera: {
                         select: {
                             id: false,
                             specification_id: false,
 
-                            resolution: true,
-                            feature: true,
-                            videoRecording: true,
+                            Resolution: true,
+                            Feature: true,
+                            VideoRecording: true,
                         }
                     },
                     Graphics: {
                         select: {
                             id: false,
                             specification_id: false,
-                            model: true,
-                            memory: true,
+                            Model: true,
+                            Memory: true,
                         }
                     },
                     Keyboard: {
                         select: {
                             id: false,
                             specification_id: false,
-                            type: true,
-                            features: true,
-                            isTouchPad: true
+                            Type: true,
+                            Features: true,
+                            Touch_Pad: true
                         }
                     },
                     Memory: {
@@ -158,27 +158,28 @@ const getSingle = async (id: string) => {
                             id: false,
                             specification_id: false,
 
-                            ram: true,
-                            ram_type: true,
-                            removable: true,
-                            total_ram_slot: true,
-                            max_ram_capacity: true,
+                            RAM: true,
+                            RAM_Type: true,
+                            Removable: true,
+                            Total_Ram_Slot: true,
+                            Max_Ram_Capacity: true,
+
                         }
                     },
-                    NetworkConnectivity: {
+                    Network_Connectivity: {
                         select: {
                             id: false,
                             specification_id: false,
 
-                            sim: true,
-                            network: true,
-                            wifi: true,
-                            bluetooth: true,
-                            gps: true,
-                            nfc: true,
-                            usb: true,
+                            SIM: true,
+                            Network: true,
+                            Wifi: true,
+                            Bluetooth: true,
+                            Gps: true,
+                            Nfc: true,
+                            USB: true,
                             otg: true,
-                            audioJack: true,
+                            Audio_Jack: true,
                         }
                     },
                     Os: {
@@ -186,51 +187,52 @@ const getSingle = async (id: string) => {
                             id: false,
                             specification_id: false,
 
-                            OsSystem: true,
-                            upgradable: true,
+                            Os_System: true,
+                            Upgradable: true,
                         }
                     },
-                    PhysicalSpecification: {
-                        select: {
-                            id: false,
-                            specification_id: false,
-                            color: true,
-                            dimensions: true,
-                            weight: true,
-                            bodyMaterial: true,
-                        }
-                    },
-                    PortsSlots: {
+                    Physical_Specification: {
                         select: {
                             id: false,
                             specification_id: false,
 
-                            opticalDrive: true,
-                            cardReader: true,
-                            vga: true,
-                            displayPort: true,
-                            hdmiPort: true,
-                            usb2Port: true,
-                            usb3Port: true,
-                            usbTypeC: true,
+                            Color: true,
+                            Dimensions: true,
+                            Weight: true,
+                            Body_Material: true,
+                        }
+                    },
+                    Ports_Slots: {
+                        select: {
+                            id: false,
+                            specification_id: false,
+
+                            Optical_Drive: true,
+                            CardReader: true,
+                            VGA: true,
+                            Display_Port: true,
+                            HDMI_Port: true,
+                            USB_2_Port: true,
+                            USB_3_Port: true,
+                            USB_TypeC: true,
                         }
                     },
                     Power: {
                         select: {
                             id: false,
                             specification_id: false,
-                            type: true,
-                            voltage: true,
+                            Type: true,
+                            Voltage: true,
                         }
                     },
-                    RearCamera: {
+                    Rear_Camera: {
                         select: {
                             id: false,
                             specification_id: false,
 
-                            resolution: true,
-                            feature: true,
-                            videoRecording: true,
+                            Resolution: true,
+                            Feature: true,
+                            VideoRecording: true,
                         }
                     },
                     Security: {
@@ -238,18 +240,18 @@ const getSingle = async (id: string) => {
                             id: false,
                             specification_id: false,
 
-                            isHasfingerprintSensor: true,
-                            securityChip: true
+                            Fingerprint_Sensor: true,
+                            Security_Chip: true
                         }
                     },
                     Storage: {
                         select: {
                             id: false,
                             specification_id: false,
-                            storage_type: true,
-                            storage_capacity: true,
+                            Storage_Type: true,
+                            Storage_Capacity: true,
                             hdd_rpm: true,
-                            isExtraM2_slot: true
+                            Extra_M2_Slot: true,
                         }
                     },
                 },
@@ -268,8 +270,6 @@ const getSingle = async (id: string) => {
             if (typeof (result?.Specification as any)[key] !== "object" || (result.Specification as any)[key] === null) {
                 delete (result?.Specification as any)[key]
             }
-
-
         }
     }
 

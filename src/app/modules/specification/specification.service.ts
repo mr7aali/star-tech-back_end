@@ -49,8 +49,7 @@ const create = async (
             id: specificationID
         },
         include: {
-            display: true,
-            processor: true
+            
         }
     })
     console.log(result);

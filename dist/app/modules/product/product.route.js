@@ -10,4 +10,5 @@ const router = express_1.default.Router();
 router.post('/create', product_controller_1.ProductController.create);
 router.get('/', product_controller_1.ProductController.getAll);
 router.get('/:id', product_controller_1.ProductController.getSingle);
+// router.get('/:id', ProductController.getSingle);
 exports.ProductRoutes = router;

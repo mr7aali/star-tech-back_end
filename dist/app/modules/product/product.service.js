@@ -8,72 +8,245 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ProductService = exports.prisma = void 0;
-const client_1 = require("@prisma/client");
-exports.prisma = new client_1.PrismaClient();
-const create = (images, featuresData, productData) => __awaiter(void 0, void 0, void 0, function* () {
-    ///create product 
-    const ProductCreateResult = yield exports.prisma.product.create({
-        data: productData
-    });
-    const productId = ProductCreateResult.id;
-    const imagesWithProductId = images.map((url) => (Object.assign(Object.assign({}, url), { productId })));
-    const featuresWithProductId = featuresData.map((features) => (Object.assign(Object.assign({}, features), { productId })));
-    ///! this login unble to create all data , some time they forget to push all data 🤣
-    // const imageCreateResponse = imagesWithProductId.map(async (image) => await prisma.image.create({
-    //     data: image
-    // }));
-    // const featureCreateResponse = featuresWithProductId.map(async (feature) => await prisma.feature.create({
-    //     data: feature
-    // }))
-    //! for loop work well in this problem 
-    for (let i = 0; i < Number(imagesWithProductId.length); i++) {
-        yield exports.prisma.image.create({
-            data: imagesWithProductId[i]
+exports.ProductService = void 0;
+const prisma_1 = require("../../../shared/prisma");
+const CustomError_1 = __importDefault(require("../../../errors/CustomError"));
+const http_status_codes_1 = require("http-status-codes");
+const create = ({ product, spacificationData }) => __awaiter(void 0, void 0, void 0, function* () {
+    const productID = yield prisma_1.prisma.$transaction((tx) => __awaiter(void 0, void 0, void 0, function* () {
+        //! product created
+        const productResult = yield tx.product.create({ data: product });
+        //! specification created
+        const specificationResult = yield tx.specification.create({
+            data: { product_id: productResult.id }
         });
-    }
-    for (let i = 0; i < Number(featuresWithProductId.length); i++) {
-        yield exports.prisma.feature.create({
-            data: featuresWithProductId[i]
-        });
-    }
-    const result = yield exports.prisma.product.findUnique({
+        const specification_id = Number(specificationResult.id);
+        for (const [tableName, recordData] of Object.entries(spacificationData)) {
+            const recordDataWithForeignKey = Object.assign(Object.assign({}, recordData), { specification_id });
+            yield tx[tableName].create({
+                data: recordDataWithForeignKey
+            });
+        }
+        return productResult.id;
+    }));
+    const result = yield prisma_1.prisma.product.findUnique({
         where: {
-            id: ProductCreateResult.id
+            id: productID
         },
         include: {
-            images: true, features: true
+            Specification: {
+                include: {
+                    Display: true,
+                    product: true,
+                    Processor: true
+                }
+            }
         }
     });
     return result;
 });
-const getAll = (paginationOption) => __awaiter(void 0, void 0, void 0, function* () {
-    const page = Number(paginationOption.page) || 1;
-    const limit = Number(paginationOption.limit) || 10;
-    const skip = (page - 1) * limit;
-    const sortBy = paginationOption.sortBy || 'createdAt';
-    const sortOrder = paginationOption.sortOrder || 'asc';
-    const sortCondition = {};
-    if (sortBy && sortOrder) {
-        sortCondition[sortBy] = sortOrder;
+const getAll = () => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield prisma_1.prisma.product.findMany({});
+    if (!result.length) {
+        throw new CustomError_1.default(http_status_codes_1.StatusCodes.NOT_FOUND, "Product not found!");
     }
-    const result = yield exports.prisma.product.findMany({
-        take: limit, skip,
-        orderBy: sortCondition,
-        include: {
-            features: true,
-            images: true
-        }
-    });
     return result;
 });
 const getSingle = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield exports.prisma.product.findUnique({
+    const result = yield prisma_1.prisma.product.findUnique({
         where: {
-            id
-        }
+            id: Number(id)
+        },
+        include: {
+            Specification: {
+                include: {
+                    // product: true,
+                    Display: {
+                        select: {
+                            id: false,
+                            specification_id: false,
+                            // Include other fields you need
+                            Size: true,
+                            Type: true,
+                            Resolution: true,
+                            Touch_Screen: true,
+                            Refresh_Rate: true,
+                            Features: true,
+                        }
+                    },
+                    Processor: {
+                        select: {
+                            id: false,
+                            specification_id: false,
+                            Brand: true,
+                            Model: true,
+                            Generation: true,
+                            Frequency: true,
+                            Core: true,
+                            Thread: true,
+                            Cpu_cache: true,
+                        }
+                    },
+                    Audio: {
+                        select: {
+                            id: false,
+                            specification_id: false,
+                            Speaker: true,
+                            Speaker_Details: true
+                        }
+                    },
+                    Camera: {
+                        select: {
+                            id: false,
+                            specification_id: false,
+                            Web_Cam: true,
+                            Speaker: true,
+                            Microphone: true,
+                            Audio_Feature: true,
+                        }
+                    },
+                    Connectivity: {
+                        select: {
+                            id: false,
+                            specification_id: false,
+                            Display_Port: true,
+                            HDMI: true,
+                        }
+                    },
+                    Front_Camera: {
+                        select: {
+                            id: false,
+                            specification_id: false,
+                            Resolution: true,
+                            Feature: true,
+                            VideoRecording: true,
+                        }
+                    },
+                    Graphics: {
+                        select: {
+                            id: false,
+                            specification_id: false,
+                            Model: true,
+                            Memory: true,
+                        }
+                    },
+                    Keyboard: {
+                        select: {
+                            id: false,
+                            specification_id: false,
+                            Type: true,
+                            Features: true,
+                            Touch_Pad: true
+                        }
+                    },
+                    Memory: {
+                        select: {
+                            id: false,
+                            specification_id: false,
+                            RAM: true,
+                            RAM_Type: true,
+                            Removable: true,
+                            Total_Ram_Slot: true,
+                            Max_Ram_Capacity: true,
+                        }
+                    },
+                    Network_Connectivity: {
+                        select: {
+                            id: false,
+                            specification_id: false,
+                            SIM: true,
+                            Network: true,
+                            Wifi: true,
+                            Bluetooth: true,
+                            Gps: true,
+                            Nfc: true,
+                            USB: true,
+                            otg: true,
+                            Audio_Jack: true,
+                        }
+                    },
+                    Os: {
+                        select: {
+                            id: false,
+                            specification_id: false,
+                            Os_System: true,
+                            Upgradable: true,
+                        }
+                    },
+                    Physical_Specification: {
+                        select: {
+                            id: false,
+                            specification_id: false,
+                            Color: true,
+                            Dimensions: true,
+                            Weight: true,
+                            Body_Material: true,
+                        }
+                    },
+                    Ports_Slots: {
+                        select: {
+                            id: false,
+                            specification_id: false,
+                            Optical_Drive: true,
+                            CardReader: true,
+                            VGA: true,
+                            Display_Port: true,
+                            HDMI_Port: true,
+                            USB_2_Port: true,
+                            USB_3_Port: true,
+                            USB_TypeC: true,
+                        }
+                    },
+                    Power: {
+                        select: {
+                            id: false,
+                            specification_id: false,
+                            Type: true,
+                            Voltage: true,
+                        }
+                    },
+                    Rear_Camera: {
+                        select: {
+                            id: false,
+                            specification_id: false,
+                            Resolution: true,
+                            Feature: true,
+                            VideoRecording: true,
+                        }
+                    },
+                    Security: {
+                        select: {
+                            id: false,
+                            specification_id: false,
+                            Fingerprint_Sensor: true,
+                            Security_Chip: true
+                        }
+                    },
+                    Storage: {
+                        select: {
+                            id: false,
+                            specification_id: false,
+                            Storage_Type: true,
+                            Storage_Capacity: true,
+                            hdd_rpm: true,
+                            Extra_M2_Slot: true,
+                        }
+                    },
+                },
+            },
+        },
     });
+    if (result && result.Specification) {
+        for (const key in result.Specification) {
+            if (typeof (result === null || result === void 0 ? void 0 : result.Specification)[key] !== "object" || result.Specification[key] === null) {
+                delete (result === null || result === void 0 ? void 0 : result.Specification)[key];
+            }
+        }
+    }
     return result;
 });
 exports.ProductService = {

@@ -10,13 +10,17 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+
 model User {
   id         String @id @default(uuid())
+
   first_name String
   last_name  String
   phone      String @unique
   email      String @unique
-  passwoard  String
+  password  String
+
+  
   role       String @default("user")
 }
 
@@ -66,25 +70,27 @@ model Display {
   id               Int    @id @default(autoincrement())
   specification_id Int    @unique
 
-  size             String
-  type             String
-  resolution       String
-  touch_screen     String
-  refresh_rate     String
-  features         String
+  Size             String
+  Type             String
+  Resolution       String
+  Touch_Screen     String
+  Refresh_Rate     String
+  Features         String
 
   specification Specification @relation(fields: [specification_id], references: [id])
 }
 
 model Processor {
   id               Int    @id @default(autoincrement())
-  brand            String
-  model            String
-  generation       String
-  frequency        String
-  core             String
-  thread           String
-  cpu_cache        String
+
+  Brand            String
+  Model            String
+  Generation       String
+  Frequency        String
+  Core             String
+  Thread           String
+  Cpu_cache        String 
+
   specification_id Int    @unique
 
   specification Specification @relation(fields: [specification_id], references: [id])
@@ -94,8 +100,8 @@ model Processor {
 
 model Audio {
   id              Int    @id @default(autoincrement())
-  speaker_BuiltIn String
-  speaker_details String
+  Speaker String
+  Speaker_Details String
 
   specification_id Int           @unique
   specification    Specification @relation(fields: [specification_id], references: [id])
@@ -105,8 +111,8 @@ model Audio {
 
 model Connectivity {
   id           Int    @id @default(autoincrement())
-  display_port String
-  hdmi         String
+  Display_Port String
+  HDMI         String
 
   specification_id Int           @unique
   specification    Specification @relation(fields: [specification_id], references: [id])
@@ -116,8 +122,8 @@ model Connectivity {
 
 model Power {
   id      Int    @id @default(autoincrement())
-  type    String
-  voltage String
+  Type    String
+  Voltage String
 
   specification_id Int           @unique
   specification    Specification @relation(fields: [specification_id], references: [id])
@@ -128,11 +134,11 @@ model Power {
 model Memory {
   id Int @id @default(autoincrement())
 
-  ram              String
-  ram_type         String
-  removable        Boolean
-  total_ram_slot   String
-  max_ram_capacity String
+  RAM              String
+  RAM_Type         String
+  Removable        Boolean
+  Total_Ram_Slot   String
+  Max_Ram_Capacity String
 
   specification_id Int           @unique
   specification    Specification @relation(fields: [specification_id], references: [id])
@@ -143,10 +149,10 @@ model Memory {
 model Storage {
   id Int @id @default(autoincrement())
 
-  storage_type     String
-  storage_capacity String
+  Storage_Type     String
+  Storage_Capacity String
   hdd_rpm          String
-  isExtraM2_slot   Boolean
+  Extra_M2_Slot   String
 
   specification_id Int           @unique
   specification    Specification @relation(fields: [specification_id], references: [id])
@@ -157,8 +163,8 @@ model Storage {
 model Graphics {
   id Int @id @default(autoincrement())
 
-  model  String
-  memory String
+  Model  String
+  Memory String
 
   specification_id Int           @unique
   specification    Specification @relation(fields: [specification_id], references: [id])
@@ -169,9 +175,9 @@ model Graphics {
 model Keyboard {
   id Int @id @default(autoincrement())
 
-  type       String
-  features   String
-  isTouchPad Boolean
+  Type       String
+  Features   String
+  Touch_Pad String
 
   specification_id Int           @unique
   specification    Specification @relation(fields: [specification_id], references: [id])
@@ -182,10 +188,10 @@ model Keyboard {
 model Camera {
   id Int @id @default(autoincrement())
 
-  webCam       String
-  speaker      String
-  microphone   String
-  audioFeature String
+  Web_Cam       String
+  Speaker      String
+  Microphone   String
+  Audio_Feature String
 
   specification_id Int           @unique
   specification    Specification @relation(fields: [specification_id], references: [id])
@@ -196,14 +202,14 @@ model Camera {
 model PortsSlots {
   id Int @id @default(autoincrement())
 
-  opticalDrive String
-  cardReader   String
-  vga          String
-  displayPort  String
-  hdmiPort     String
-  usb2Port     String
-  usb3Port     String
-  usbTypeC     String
+  Optical_Drive String
+  CardReader   String
+  VGA          String
+  Display_Port  String
+  HDMI_Port     String
+  USB_2_Port     String
+  USB_3_Port     String
+  USB_TypeC     String
 
   specification_id Int           @unique
   specification    Specification @relation(fields: [specification_id], references: [id])
@@ -214,8 +220,8 @@ model PortsSlots {
 model Security {
   id Int @id @default(autoincrement())
 
-  isHasfingerprintSensor Boolean
-  securityChip           String
+  Fingerprint_Sensor Boolean
+  Security_Chip           String
 
   specification_id Int           @unique
   specification    Specification @relation(fields: [specification_id], references: [id])
@@ -225,10 +231,10 @@ model Security {
 
 model PhysicalSpecification {
   id           Int    @id @default(autoincrement())
-  color        String
-  dimensions   String
-  weight       String
-  bodyMaterial String
+  Color        String
+  Dimensions   String
+  Weight       String
+  Body_Material String
 
   specification_id Int           @unique
   specification    Specification @relation(fields: [specification_id], references: [id])
@@ -238,9 +244,9 @@ model PhysicalSpecification {
 
 model RearCamera {
   id             Int    @id @default(autoincrement())
-  resolution     String
-  feature        String
-  videoRecording String
+  Resolution     String
+  Feature        String
+  VideoRecording String
 
   specification_id Int           @unique
   specification    Specification @relation(fields: [specification_id], references: [id])
@@ -251,9 +257,9 @@ model RearCamera {
 model FrontCamera {
   id             Int    @id @default(autoincrement())
   
-  resolution     String
-  feature        String
-  videoRecording String
+  Resolution     String
+  Feature        String
+  VideoRecording String
 
   specification_id Int           @unique
   specification    Specification @relation(fields: [specification_id], references: [id])
@@ -264,15 +270,15 @@ model FrontCamera {
 model NetworkConnectivity {
   id Int @id @default(autoincrement())
 
-  sim       String
-  network   String
-  wifi      String
-  bluetooth String
-  gps       String
-  nfc       Boolean
-  usb       String
+ SIM       String
+  Network   String
+  Wifi      String
+  Bluetooth String
+  Gps       String
+  Nfc       Boolean
+  USB       String
   otg       String
-  audioJack String
+  Audio_Jack String
 
   specification_id Int           @unique
   specification    Specification @relation(fields: [specification_id], references: [id])
@@ -283,8 +289,8 @@ model NetworkConnectivity {
 model Os {
   id Int @id @default(autoincrement())
 
-  OsSystem   String
-  upgradable String
+  Os_System   String
+  Upgradable String
 
   specification_id Int           @unique
   specification    Specification @relation(fields: [specification_id], references: [id])

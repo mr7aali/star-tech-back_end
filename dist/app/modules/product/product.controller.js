@@ -27,25 +27,23 @@ exports.ProductController = void 0;
 const catchAsync_1 = __importDefault(require("../../../shared/catchAsync"));
 const sendResponse_1 = __importDefault(require("../../../shared/sendResponse"));
 const product_service_1 = require("./product.service");
-const pick_1 = __importDefault(require("../../../shared/pick"));
+const http_status_codes_1 = require("http-status-codes");
 const create = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const data = req.body;
-    const _a = req.body, { images, features } = _a, productData = __rest(_a, ["images", "features"]);
-    const result = yield product_service_1.ProductService.create(images, features, productData);
+    const _a = req.body, { product } = _a, spacificationData = __rest(_a, ["product"]);
+    const result = yield product_service_1.ProductService.create({ product, spacificationData });
     (0, sendResponse_1.default)(res, {
         statusCode: 200,
         success: true,
-        message: "Product created successfully",
+        message: "Product created successfully!",
         data: result
     });
 }));
 const getAll = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const paginationOption = (0, pick_1.default)(req.query, ["page", "limit", "sortBy", "sortOrder"]); //paginationFields
-    const result = yield product_service_1.ProductService.getAll(paginationOption);
+    const result = yield product_service_1.ProductService.getAll();
     (0, sendResponse_1.default)(res, {
-        statusCode: 200,
         success: true,
-        message: "Product created successfully",
+        statusCode: http_status_codes_1.StatusCodes.OK,
+        message: "Product get successfully!",
         data: result
     });
 }));
@@ -53,12 +51,12 @@ const getSingle = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void
     const id = req.params.id;
     const result = yield product_service_1.ProductService.getSingle(id);
     (0, sendResponse_1.default)(res, {
-        statusCode: 200,
         success: true,
-        message: "get single product successfully",
+        statusCode: http_status_codes_1.StatusCodes.OK,
+        message: "Product get successfully!",
         data: result
     });
 }));
 exports.ProductController = {
-    getAll, create, getSingle
+    create, getAll, getSingle
 };
