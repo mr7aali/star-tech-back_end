@@ -10,11 +10,12 @@ const login = async (data: User): Promise<ILoginResponse> => {
     const isUserExists = await prisma.user.findUnique({
         where: {
             email: data.email,
-            passwoard: data.passwoard
+            password:data.password
         },
         select: {
             id: true,
-            role: true
+            role: true,
+            email:true
         }
     });
 
@@ -28,6 +29,7 @@ const login = async (data: User): Promise<ILoginResponse> => {
     const Tokendata = {
         role: isUserExists.role,
         id: isUserExists.id,
+        email: isUserExists.email
     }
 
 
