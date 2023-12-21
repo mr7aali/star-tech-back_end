@@ -6,12 +6,19 @@ const create = async (data: User): Promise<User> => {
 
     return result;
 }
-const profile = async (id: string): Promise<User | null> => {
+const profile = async (id: string): Promise< Partial<User> | null> => {
 
     const result = await prisma.user.findUnique({
         where: {
             id
-        }
+        },
+    select:{
+        id:true,
+        first_name:true,
+        last_name:true,
+        email:true,
+        phone:true,
+    }
 
     });
 
