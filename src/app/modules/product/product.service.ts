@@ -3,9 +3,10 @@ import { prisma } from "../../../shared/prisma"
 import { IProductCreatingData, getSingleProductCondition } from "./product.interface"
 import CustomError from "../../../errors/CustomError"
 import { StatusCodes } from "http-status-codes"
+import { NextFunction } from "express"
 
 
-const create = async ({ product, spacificationData }: { product: Product, spacificationData: IProductCreatingData }): Promise<any | null> => {
+const create = async ({ product, spacificationData, next }: { product: Product, spacificationData: IProductCreatingData, next: NextFunction }): Promise<any | null> => {
 
 
 
@@ -22,14 +23,21 @@ const create = async ({ product, spacificationData }: { product: Product, spacif
 
 
 
-        for (const [tableName, recordData] of Object.entries(spacificationData)) {
+        for (const [tableName, recordData] of Object?.entries(spacificationData)) {
+
             const recordDataWithForeignKey = { ...recordData, specification_id }
-            await (tx as any)[tableName].create({
-                data: recordDataWithForeignKey
-            });
+            try {
+                await (tx as any)[tableName].create({
+                    data: recordDataWithForeignKey
+                });
+            } catch (err) {
+                next(err)
+            }
+
         }
+
         return productResult.id;
-    })
+    }, { timeout: 1000000 })
     const result = await prisma.product.findUnique({
         where: {
             id: productID
@@ -50,8 +58,15 @@ const create = async ({ product, spacificationData }: { product: Product, spacif
 }
 
 const getAll = async () => {
-    const result = await prisma.product.findMany({});
+    const page = 1;
+    const limit = 20;
+    const skip = (page - 1) * limit;
 
+    const result = await prisma.product.findMany({
+        skip,
+        take: limit
+    });
+  
 
     if (!result.length) {
         throw new CustomError(StatusCodes.NOT_FOUND, "Product not found!")
@@ -126,7 +141,7 @@ const getSingle = async (id: string) => {
                             HDMI: true,
                         }
                     },
-                    Front_Camera: {
+                    FrontCamera: {
                         select: {
                             id: false,
                             specification_id: false,
@@ -166,7 +181,7 @@ const getSingle = async (id: string) => {
 
                         }
                     },
-                    Network_Connectivity: {
+                    NetworkConnectivity: {
                         select: {
                             id: false,
                             specification_id: false,
@@ -191,7 +206,7 @@ const getSingle = async (id: string) => {
                             Upgradable: true,
                         }
                     },
-                    Physical_Specification: {
+                    PhysicalSpecificaion: {
                         select: {
                             id: false,
                             specification_id: false,
@@ -225,7 +240,7 @@ const getSingle = async (id: string) => {
                             Voltage: true,
                         }
                     },
-                    Rear_Camera: {
+                    RearCamera: {
                         select: {
                             id: false,
                             specification_id: false,

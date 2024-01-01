@@ -24,11 +24,13 @@ const globalErrorHandler: ErrorRequestHandler = (
         statusCode = simplifiedError.statusCode;
         message = simplifiedError.message;
         errorMessages = simplifiedError.errorMessages;
+        console.log("Error massage",errorMessages)
     }
     else if (error instanceof PrismaClientValidationError) {
         const simplifiedError = handleValidationError(error);
         message = simplifiedError.message;
         errorMessages = simplifiedError.errorMessages
+        console.log("Error massage",errorMessages)
 
     }
     else if (error instanceof JsonWebTokenError) {

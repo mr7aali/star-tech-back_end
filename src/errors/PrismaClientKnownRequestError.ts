@@ -6,6 +6,7 @@ import { StatusCodes } from "http-status-codes";
 
 
 
+
 type IValidation =
     { target: string[] }
 const PrismaClientError = (error: PrismaClientKnownRequestError): IGenericErrorResponse => {
@@ -15,16 +16,17 @@ const PrismaClientError = (error: PrismaClientKnownRequestError): IGenericErrorR
     }]
 
     const errorWithTargetFilds = error.meta as IValidation;
-    errors = errorWithTargetFilds.target.map(field => {
+    errors = errorWithTargetFilds?.target?.map(field => {
         const capitalizedField = field.charAt(0).toUpperCase() + field.slice(1);
         return {
             path: "",
             message: `${capitalizedField} is already exists!`
         }
     })
+    
     return {
         statusCode: StatusCodes.BAD_REQUEST,
-        message: 'Validation Error',
+        message: error.meta?.error as string  ||  'Validation Error',
         errorMessages: errors
     }
 }

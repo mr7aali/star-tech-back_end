@@ -1,14 +1,14 @@
 
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import catchAsync from "../../../shared/catchAsync";
 import sendResponse from "../../../shared/sendResponse";
 import { ProductService } from './product.service';
 import { StatusCodes } from "http-status-codes";
 
 const create = catchAsync(
-    async (req: Request, res: Response) => {
+    async (req: Request, res: Response,next:NextFunction) => {
         const { product, ...spacificationData } = req.body;
-        const result = await ProductService.create({ product, spacificationData });
+        const result = await ProductService.create({ product, spacificationData ,next});
 
         sendResponse<any>(res, {
             statusCode: 200,
