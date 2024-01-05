@@ -1,9 +1,12 @@
+import { specificationRoutes } from './../specification/specification.route';
 import { Product } from "@prisma/client"
 import { prisma } from "../../../shared/prisma"
-import { IProductCreatingData, getSingleProductCondition } from "./product.interface"
+import { IProductCreatingData, ISpecificationData, ITableName, IncludeAllSpecification, } from "./product.interface"
 import CustomError from "../../../errors/CustomError"
 import { StatusCodes } from "http-status-codes"
 import { NextFunction } from "express"
+import { type } from 'os';
+import { table } from 'console';
 
 
 const create = async ({ product, spacificationData, next }: { product: Product, spacificationData: IProductCreatingData, next: NextFunction }): Promise<any | null> => {
@@ -45,9 +48,9 @@ const create = async ({ product, spacificationData, next }: { product: Product, 
         include: {
             Specification: {
                 include: {
-                    Display: true,
+                    display: true,
                     product: true,
-                    Processor: true
+                    processor: true
 
                 }
             }
@@ -80,198 +83,7 @@ const getSingle = async (id: string) => {
             id: Number(id)
         },
         include: {
-            Specification: {
-                include: {
-                    // product: true,
-                    Display: {
-                        select: {
-                            id: false,
-                            specification_id: false,
-                            // Include other fields you need
-                            Size: true,
-                            Type: true,
-                            Resolution: true,
-                            Touch_Screen: true,
-                            Refresh_Rate: true,
-                            Features: true,
-
-                        }
-                    },
-
-                    Processor: {
-                        select: {
-                            id: false,
-                            specification_id: false,
-
-                            Brand: true,
-                            Model: true,
-                            Generation: true,
-                            Frequency: true,
-                            Core: true,
-                            Thread: true,
-                            Cpu_cache: true,
-                        }
-                    },
-                    Audio: {
-                        select: {
-                            id: false,
-                            specification_id: false,
-
-                            Speaker: true,
-                            Speaker_Details: true
-                        }
-                    },
-                    Camera: {
-                        select: {
-                            id: false,
-                            specification_id: false,
-
-                            Web_Cam: true,
-                            Speaker: true,
-                            Microphone: true,
-                            Audio_Feature: true,
-                        }
-                    },
-                    Connectivity: {
-                        select: {
-                            id: false,
-                            specification_id: false,
-
-                            Display_Port: true,
-                            HDMI: true,
-                        }
-                    },
-                    FrontCamera: {
-                        select: {
-                            id: false,
-                            specification_id: false,
-
-                            Resolution: true,
-                            Feature: true,
-                            VideoRecording: true,
-                        }
-                    },
-                    Graphics: {
-                        select: {
-                            id: false,
-                            specification_id: false,
-                            Model: true,
-                            Memory: true,
-                        }
-                    },
-                    Keyboard: {
-                        select: {
-                            id: false,
-                            specification_id: false,
-                            Type: true,
-                            Features: true,
-                            Touch_Pad: true
-                        }
-                    },
-                    Memory: {
-                        select: {
-                            id: false,
-                            specification_id: false,
-
-                            RAM: true,
-                            RAM_Type: true,
-                            Removable: true,
-                            Total_Ram_Slot: true,
-                            Max_Ram_Capacity: true,
-
-                        }
-                    },
-                    NetworkConnectivity: {
-                        select: {
-                            id: false,
-                            specification_id: false,
-
-                            SIM: true,
-                            Network: true,
-                            Wifi: true,
-                            Bluetooth: true,
-                            Gps: true,
-                            Nfc: true,
-                            USB: true,
-                            otg: true,
-                            Audio_Jack: true,
-                        }
-                    },
-                    Os: {
-                        select: {
-                            id: false,
-                            specification_id: false,
-
-                            Os_System: true,
-                            Upgradable: true,
-                        }
-                    },
-                    PhysicalSpecificaion: {
-                        select: {
-                            id: false,
-                            specification_id: false,
-
-                            Color: true,
-                            Dimensions: true,
-                            Weight: true,
-                            Body_Material: true,
-                        }
-                    },
-                    Ports_Slots: {
-                        select: {
-                            id: false,
-                            specification_id: false,
-
-                            Optical_Drive: true,
-                            CardReader: true,
-                            VGA: true,
-                            Display_Port: true,
-                            HDMI_Port: true,
-                            USB_2_Port: true,
-                            USB_3_Port: true,
-                            USB_TypeC: true,
-                        }
-                    },
-                    Power: {
-                        select: {
-                            id: false,
-                            specification_id: false,
-                            Type: true,
-                            Voltage: true,
-                        }
-                    },
-                    RearCamera: {
-                        select: {
-                            id: false,
-                            specification_id: false,
-
-                            Resolution: true,
-                            Feature: true,
-                            VideoRecording: true,
-                        }
-                    },
-                    Security: {
-                        select: {
-                            id: false,
-                            specification_id: false,
-
-                            Fingerprint_Sensor: true,
-                            Security_Chip: true
-                        }
-                    },
-                    Storage: {
-                        select: {
-                            id: false,
-                            specification_id: false,
-                            Storage_Type: true,
-                            Storage_Capacity: true,
-                            hdd_rpm: true,
-                            Extra_M2_Slot: true,
-                        }
-                    },
-                },
-
-            },
+            Specification: IncludeAllSpecification,
 
         },
 
@@ -292,11 +104,25 @@ const getSingle = async (id: string) => {
 }
 
 
-const updateProduct = async ({ id, data }: { id: number, data: Product }) => {
-    console.log(id, data)
-    const result = await prisma.product.update({ where: { id: id }, data });
+const updateProduct = async ({ id, data }: { id: number, data: ISpecificationData }) => {
 
-    return result
+
+
+    const result = await prisma.$transaction(async (tx) => {
+        for (const [tableName, recordData] of Object?.entries(data)) {
+
+            const r = await (prisma as any)[tableName].update({
+                where: {
+                    id: recordData.id
+                },
+                data: data[tableName as ITableName]
+            });
+            console.log(r)
+        }
+    }, { timeout: 1000000 })
+
+
+return result;
 }
 
 

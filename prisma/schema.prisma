@@ -44,23 +44,23 @@ model Specification {
 
   product Product @relation(fields: [product_id], references: [id])
 
-  Display              Display?
-  Processor            Processor?
-  Audio                Audio?
-  Connectivity         Connectivity?
-  Power                Power?
-  Memory               Memory?
-  Storage              Storage?
-  Graphics             Graphics?
-  Keyboard             Keyboard?
-  Camera               Camera?
-  Ports_Slots          PortsSlots?
-  Security             Security?
-  PhysicalSpecificaion PhysicalSpecificaion?
-  RearCamera           RearCamera?
-  FrontCamera          FrontCamera?
-  NetworkConnectivity  NetworkConnectivity?
-  Os                   Os?
+  display              Display?
+  processor            Processor?
+  audio                Audio?
+  connectivity         Connectivity?
+  power                Power?
+  memory               Memory?
+  storage              Storage?
+  graphics             Graphics?
+  keyboard             Keyboard?
+  camera               Camera?
+  portsSlots          PortsSlots?
+  security             Security?
+  physicalSpecificaion PhysicalSpecificaion?
+  rearCamera           RearCamera?
+  frontCamera          FrontCamera?
+  networkConnectivity  NetworkConnectivity?
+  os                   Os?
 
   @@map("specification")
 }
@@ -222,6 +222,7 @@ model Security {
   Fingerprint_Sensor Boolean
   Security_Chip      String
 
+  
   specification_id Int           @unique
   specification    Specification @relation(fields: [specification_id], references: [id])
 

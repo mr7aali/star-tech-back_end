@@ -4,10 +4,12 @@ import catchAsync from "../../../shared/catchAsync";
 import sendResponse from "../../../shared/sendResponse";
 import { ProductService } from './product.service';
 import { StatusCodes } from "http-status-codes";
+import { ISpecificationData } from "./product.interface";
 
 const create = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
         const { product, ...spacificationData } = req.body;
+        console.log(spacificationData)
         const result = await ProductService.create({ product, spacificationData, next });
 
         sendResponse<any>(res, {
@@ -50,10 +52,11 @@ const getSingle = catchAsync(
 const updateProduct = catchAsync(
     async (req: Request, res: Response) => {
         const id = Number(req.params.id);
-        const data = req.body;
+        const data :ISpecificationData= req.body;
+        
+
         const result = await ProductService.updateProduct({id,data});
 
-       
         sendResponse(res, {
             statusCode: StatusCodes.OK,
             success: true,
