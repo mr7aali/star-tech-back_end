@@ -6,9 +6,9 @@ import { ProductService } from './product.service';
 import { StatusCodes } from "http-status-codes";
 
 const create = catchAsync(
-    async (req: Request, res: Response,next:NextFunction) => {
+    async (req: Request, res: Response, next: NextFunction) => {
         const { product, ...spacificationData } = req.body;
-        const result = await ProductService.create({ product, spacificationData ,next});
+        const result = await ProductService.create({ product, spacificationData, next });
 
         sendResponse<any>(res, {
             statusCode: 200,
@@ -46,6 +46,23 @@ const getSingle = catchAsync(
         })
     }
 )
+
+const updateProduct = catchAsync(
+    async (req: Request, res: Response) => {
+        const id = Number(req.params.id);
+        const data = req.body;
+        const result = await ProductService.updateProduct({id,data});
+
+       
+        sendResponse(res, {
+            statusCode: StatusCodes.OK,
+            success: true,
+            message: "Product data update successfully!",
+            data: result
+        })
+
+    })
+
 export const ProductController = {
-    create, getAll, getSingle
+    create, getAll, getSingle, updateProduct
 }

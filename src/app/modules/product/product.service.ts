@@ -66,7 +66,7 @@ const getAll = async () => {
         skip,
         take: limit
     });
-  
+
 
     if (!result.length) {
         throw new CustomError(StatusCodes.NOT_FOUND, "Product not found!")
@@ -292,9 +292,14 @@ const getSingle = async (id: string) => {
 }
 
 
+const updateProduct = async ({ id, data }: { id: number, data: Product }) => {
+    console.log(id, data)
+    const result = await prisma.product.update({ where: { id: id }, data });
 
+    return result
+}
 
 
 export const ProductService = {
-    create, getAll, getSingle
+    create, getAll, getSingle, updateProduct
 }
