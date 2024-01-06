@@ -117,7 +117,7 @@ const updateProduct = async ({ id, data }: { id: number, data: ISpecificationDat
                 },
                 data: data[tableName as ITableName]
             });
-            console.log(r)
+           
         }
     }, { timeout: 1000000 })
 
