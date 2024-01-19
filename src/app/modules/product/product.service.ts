@@ -1,12 +1,11 @@
-import { specificationRoutes } from './../specification/specification.route';
+
 import { Product } from "@prisma/client"
 import { prisma } from "../../../shared/prisma"
 import { IProductCreatingData, ISpecificationData, ITableName, IncludeAllSpecification, } from "./product.interface"
 import CustomError from "../../../errors/CustomError"
 import { StatusCodes } from "http-status-codes"
 import { NextFunction } from "express"
-import { type } from 'os';
-import { table } from 'console';
+
 
 
 const create = async ({ product, spacificationData, next }: { product: Product, spacificationData: IProductCreatingData, next: NextFunction }): Promise<any | null> => {
