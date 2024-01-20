@@ -9,7 +9,7 @@ import { ISpecificationData } from "./product.interface";
 const create = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
         const { product, ...spacificationData } = req.body;
-        console.log(spacificationData)
+        
         const result = await ProductService.create({ product, spacificationData, next });
 
         sendResponse<any>(res, {

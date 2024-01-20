@@ -5,29 +5,20 @@ import { IProductCreatingData, ISpecificationData, ITableName, IncludeAllSpecifi
 import CustomError from "../../../errors/CustomError"
 import { StatusCodes } from "http-status-codes"
 import { NextFunction } from "express"
-import { clearScreenDown } from "readline"
+
 
 
 
 const create = async ({ product, spacificationData, next }: { product: Product, spacificationData: IProductCreatingData, next: NextFunction }): Promise<any | null> => {
 
-
-
-    const productID = await prisma.$transaction(async (tx) => {
-
-        //! product created
+    const result = await prisma.$transaction(async (tx) => {
         const productResult = await tx.product.create({ data: product })
-
-        //! specification created
         const specificationResult = await tx.specification.create({
             data: { product_id: productResult.id }
-        })
+        });
+
         const specification_id = Number(specificationResult.id)
-
-
-
         for (const [tableName, recordData] of Object?.entries(spacificationData)) {
-
             const recordDataWithForeignKey = { ...recordData, specification_id }
             try {
                 await (tx as any)[tableName].create({
@@ -36,28 +27,11 @@ const create = async ({ product, spacificationData, next }: { product: Product, 
             } catch (err) {
                 next(err)
             }
+        };
 
-        }
-
-        return productResult.id;
+        return productResult;
     }, { timeout: 1000000 })
-    const result = await prisma.product.findUnique({
-        where: {
-            id: productID
-        },
-        include: {
-            Specification: {
-                include: {
-                    display: true,
-                    product: true,
-                    processor: true
-
-                }
-            }
-        }
-    })
-
-    return result
+    return result;
 }
 
 const getAll = async () => {
@@ -69,7 +43,7 @@ const getAll = async () => {
         skip,
         take: limit
     });
-    
+
     return result;
 }
 const getSingle = async (id: string) => {

@@ -52,7 +52,7 @@ const create = async (
             
         }
     })
-    console.log(result);
+ 
     return result
 
 
