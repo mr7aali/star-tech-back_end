@@ -31,7 +31,7 @@ const getAll = catchAsync(
             success: true,
             statusCode: StatusCodes.OK,
             message: "Product get successfully!",
-            data: result
+            data: result 
         })
     }
 )
@@ -44,7 +44,7 @@ const getSingle = catchAsync(
             success: true,
             statusCode: StatusCodes.OK,
             message: "Product get successfully!",
-            data: result
+            data: result || []
         })
     }
 )

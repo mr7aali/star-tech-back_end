@@ -22,8 +22,16 @@ model User {
   role String @default("user")
 }
 
+model Category {
+  id      Int       @id @default(autoincrement())
+  name    String    @unique
+  Image   String
+  Product Product[]
+}
+
 model Product {
-  id Int @id @default(autoincrement())
+  id          Int @id @default(autoincrement())
+  category_id Int
 
   name          String
   price         String
@@ -34,6 +42,8 @@ model Product {
   image         String
   warranty      String         @default("No Warranty")
   Specification Specification?
+
+  category Category @relation(fields: [category_id], references: [id])
 
   @@map("products")
 }
@@ -54,7 +64,7 @@ model Specification {
   graphics             Graphics?
   keyboard             Keyboard?
   camera               Camera?
-  portsSlots          PortsSlots?
+  portsSlots           PortsSlots?
   security             Security?
   physicalSpecificaion PhysicalSpecificaion?
   rearCamera           RearCamera?
@@ -222,7 +232,6 @@ model Security {
   Fingerprint_Sensor Boolean
   Security_Chip      String
 
-  
   specification_id Int           @unique
   specification    Specification @relation(fields: [specification_id], references: [id])
 

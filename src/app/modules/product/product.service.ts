@@ -5,6 +5,7 @@ import { IProductCreatingData, ISpecificationData, ITableName, IncludeAllSpecifi
 import CustomError from "../../../errors/CustomError"
 import { StatusCodes } from "http-status-codes"
 import { NextFunction } from "express"
+import { clearScreenDown } from "readline"
 
 
 
@@ -68,12 +69,7 @@ const getAll = async () => {
         skip,
         take: limit
     });
-
-
-    if (!result.length) {
-        throw new CustomError(StatusCodes.NOT_FOUND, "Product not found!")
-    }
-
+    
     return result;
 }
 const getSingle = async (id: string) => {
@@ -88,7 +84,9 @@ const getSingle = async (id: string) => {
 
 
     });
-
+    if (!result) {
+        throw new CustomError(StatusCodes.NOT_FOUND, "Product not found!")
+    }
 
     if (result && result.Specification) {
         for (const key in result.Specification) {
@@ -116,12 +114,12 @@ const updateProduct = async ({ id, data }: { id: number, data: ISpecificationDat
                 },
                 data: data[tableName as ITableName]
             });
-           
+
         }
     }, { timeout: 1000000 })
 
 
-return result;
+    return result;
 }
 
 
