@@ -16,7 +16,7 @@ const globalErrorHandler: ErrorRequestHandler = (
     let statusCode = 400;
     let message = 'Something went wrong !';
     let errorMessages: IGenericErrorMessage[] = []
-
+   console.log(error);
 
     if (error instanceof PrismaClientKnownRequestError) {
         const simplifiedError = PrismaClientError(error);

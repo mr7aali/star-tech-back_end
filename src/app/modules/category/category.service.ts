@@ -22,6 +22,7 @@ const update = async ({ id, data }: { id: string, data: Partial<Category>; }): P
     return result;
 }
 const getAll = async (): Promise<Category[]> => {
+
     const result = await prisma.category.findMany({
     });
     if (!result) {
@@ -33,6 +34,8 @@ const getSingle = async (id: string): Promise<Category> => {
     const result = await prisma.category.findUnique({
         where: {
             id: Number(id)
+        }, include: {
+            Product: true
         }
     })
     if (!result) {
