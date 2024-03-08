@@ -22,7 +22,7 @@ const update = catchAsync(
     async (req: Request, res: Response) => {
         const data = req.body;
         const id = req.params.id;
-        const result = await CatagoryService.update({id,data});
+        const result = await CatagoryService.update({ id, data });
 
 
         sendResponse<Category>(res, {
@@ -35,7 +35,7 @@ const update = catchAsync(
 );
 const getAll = catchAsync(
     async (req: Request, res: Response) => {
-        
+
         const result = await CatagoryService.getAll();
 
 
@@ -61,7 +61,21 @@ const getSingle = catchAsync(
         })
     }
 );
+const deleteCategory = catchAsync(
+    async (req: Request, res: Response) => {
+        const id = req.params.id;
+        const result = await CatagoryService.deleteCategory(id);
+
+
+        sendResponse<Category>(res, {
+            statusCode: 200,
+            success: true,
+            message: "single category!",
+            data: result
+        })
+    }
+);
 
 export const CategoryController = {
-    create,update,getAll,getSingle
+    create, update, getAll, getSingle, deleteCategory
 }

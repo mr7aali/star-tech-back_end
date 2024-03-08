@@ -43,7 +43,18 @@ const getSingle = async (id: string): Promise<Category> => {
     }
     return result;
 }
+const deleteCategory = async (id: string): Promise<Category> => {
+    const result = await prisma.category.delete({
+        where: {
+            id: Number(id)
+        }
+    })
+    if (!result) {
+        throw new CustomError(StatusCodes.BAD_REQUEST, "Category not found");
+    }
+    return result;
+}
 
 export const CatagoryService = {
-    create, update, getAll, getSingle
+    create, update, getAll, getSingle, deleteCategory
 }
