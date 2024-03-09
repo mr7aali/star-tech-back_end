@@ -23,15 +23,15 @@ model User {
 }
 
 model Category {
-  id      Int       @id @default(autoincrement())
+  id      String    @id @default(uuid())
   name    String    @unique
   Image   String
   Product Product[]
 }
 
 model Product {
-  id          Int @id @default(autoincrement())
-  category_id Int
+  id          String @id @default(uuid())
+  category_id String
 
   name          String
   price         String
@@ -49,8 +49,8 @@ model Product {
 }
 
 model Specification {
-  id         Int @id @default(autoincrement())
-  product_id Int @unique
+  id         String @id @default(uuid())
+  product_id String @unique
 
   product Product @relation(fields: [product_id], references: [id])
 
@@ -76,8 +76,8 @@ model Specification {
 }
 
 model Display {
-  id               Int @id @default(autoincrement())
-  specification_id Int @unique
+  id               String @id @default(uuid())
+  specification_id String @unique
 
   Size         String
   Type         String
@@ -90,7 +90,7 @@ model Display {
 }
 
 model Processor {
-  id Int @id @default(autoincrement())
+  id String @id @default(uuid())
 
   Brand      String
   Model      String
@@ -100,7 +100,7 @@ model Processor {
   Thread     String
   Cpu_cache  String
 
-  specification_id Int @unique
+  specification_id String @unique
 
   specification Specification @relation(fields: [specification_id], references: [id])
 
@@ -108,40 +108,40 @@ model Processor {
 }
 
 model Audio {
-  id              Int    @id @default(autoincrement())
+  id              String @id @default(uuid())
   Speaker         String
   Speaker_Details String
 
-  specification_id Int           @unique
+  specification_id String        @unique
   specification    Specification @relation(fields: [specification_id], references: [id])
 
   @@map("audio")
 }
 
 model Connectivity {
-  id           Int    @id @default(autoincrement())
+  id           String @id @default(uuid())
   Display_Port String
   HDMI         String
 
-  specification_id Int           @unique
+  specification_id String        @unique
   specification    Specification @relation(fields: [specification_id], references: [id])
 
   @@map("connectivity")
 }
 
 model Power {
-  id      Int    @id @default(autoincrement())
+  id      String @id @default(uuid())
   Type    String
   Voltage String
 
-  specification_id Int           @unique
+  specification_id String        @unique
   specification    Specification @relation(fields: [specification_id], references: [id])
 
   @@map("power")
 }
 
 model Memory {
-  id Int @id @default(autoincrement())
+  id String @id @default(uuid())
 
   RAM              String
   RAM_Type         String
@@ -149,67 +149,67 @@ model Memory {
   Total_Ram_Slot   String
   Max_Ram_Capacity String
 
-  specification_id Int           @unique
+  specification_id String        @unique
   specification    Specification @relation(fields: [specification_id], references: [id])
 
   @@map("memory")
 }
 
 model Storage {
-  id Int @id @default(autoincrement())
+  id String @id @default(uuid())
 
   Storage_Type     String
   Storage_Capacity String
   hdd_rpm          String
   Extra_M2_Slot    String
 
-  specification_id Int           @unique
+  specification_id String        @unique
   specification    Specification @relation(fields: [specification_id], references: [id])
 
   @@map("storage")
 }
 
 model Graphics {
-  id Int @id @default(autoincrement())
+  id String @id @default(uuid())
 
   Model  String
   Memory String
 
-  specification_id Int           @unique
+  specification_id String        @unique
   specification    Specification @relation(fields: [specification_id], references: [id])
 
   @@map("graphics")
 }
 
 model Keyboard {
-  id Int @id @default(autoincrement())
+  id String @id @default(uuid())
 
   Type      String
   Features  String
   Touch_Pad String
 
-  specification_id Int           @unique
+  specification_id String        @unique
   specification    Specification @relation(fields: [specification_id], references: [id])
 
   @@map("keyboard")
 }
 
 model Camera {
-  id Int @id @default(autoincrement())
+  id String @id @default(uuid())
 
   Web_Cam       String
   Speaker       String
   Microphone    String
   Audio_Feature String
 
-  specification_id Int           @unique
+  specification_id String        @unique
   specification    Specification @relation(fields: [specification_id], references: [id])
 
   @@map("camera")
 }
 
 model PortsSlots {
-  id Int @id @default(autoincrement())
+  id String @id @default(uuid())
 
   Optical_Drive String
   CardReader    String
@@ -220,19 +220,19 @@ model PortsSlots {
   USB_3_Port    String
   USB_TypeC     String
 
-  specification_id Int           @unique
+  specification_id String        @unique
   specification    Specification @relation(fields: [specification_id], references: [id])
 
   @@map("prots_slots")
 }
 
 model Security {
-  id Int @id @default(autoincrement())
+  id String @id @default(uuid())
 
   Fingerprint_Sensor Boolean
   Security_Chip      String
 
-  specification_id Int           @unique
+  specification_id String        @unique
   specification    Specification @relation(fields: [specification_id], references: [id])
 
   @@map("security")
@@ -245,7 +245,7 @@ model PhysicalSpecificaion {
   Weight        String
   Body_Material String
 
-  specification_id Int           @unique
+  specification_id String        @unique
   specification    Specification @relation(fields: [specification_id], references: [id])
 
   @@map("physical_specificaion")
@@ -257,27 +257,27 @@ model RearCamera {
   Feature        String
   VideoRecording String
 
-  specification_id Int           @unique
+  specification_id String        @unique
   specification    Specification @relation(fields: [specification_id], references: [id])
 
   @@map("rear_camera")
 }
 
 model FrontCamera {
-  id Int @id @default(autoincrement())
+  id String @id @default(uuid())
 
   Resolution     String
   Feature        String
   VideoRecording String
 
-  specification_id Int           @unique
+  specification_id String        @unique
   specification    Specification @relation(fields: [specification_id], references: [id])
 
   @@map("fornt_camera")
 }
 
 model NetworkConnectivity {
-  id Int @id @default(autoincrement())
+  id String @id @default(uuid())
 
   SIM        String
   Network    String
@@ -289,19 +289,19 @@ model NetworkConnectivity {
   otg        String
   Audio_Jack String
 
-  specification_id Int           @unique
+  specification_id String        @unique
   specification    Specification @relation(fields: [specification_id], references: [id])
 
   @@map("network_connectivity")
 }
 
 model Os {
-  id Int @id @default(autoincrement())
+  id String @id @default(uuid())
 
   Os_System  String
   Upgradable String
 
-  specification_id Int           @unique
+  specification_id String        @unique
   specification    Specification @relation(fields: [specification_id], references: [id])
 
   @@map("os")
