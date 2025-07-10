@@ -1,36 +1,38 @@
 import { User } from "@prisma/client";
 import { prisma } from "../../../shared/prisma";
+import bcrypt from "bcrypt";
+import CustomError from "../../../errors/CustomError";
 
 const create = async (data: User): Promise<User> => {
-    const result = await prisma.user.create({ data });
+  try {
+    const hashedPassword = await bcrypt.hash(data.password, 10);
+    data.password = hashedPassword;
+  } catch (error) {
+    throw new CustomError(500, "Failed to hash password");
+  }
 
-    return result;
-}
-const profile = async (id: string): Promise< Partial<User> | null> => {
-
-    const result = await prisma.user.findUnique({
-        where: {
-            id
-        },
-    select:{
-        id:true,
-        first_name:true,
-        last_name:true,
-        email:true,
-        phone:true,
-    }
-
-    });
-
-    return result;
-}
+  return await prisma.user.create({ data });
+};
+const profile = async (id: string): Promise<Partial<User> | null> => {
+  return await prisma.user.findUnique({
+    where: {
+      id,
+    },
+    select: {
+      id: true,
+      first_name: true,
+      last_name: true,
+      email: true,
+      phone: true,
+    },
+  });
+};
 const getAll = async (): Promise<User[]> => {
-
-    const result = await prisma.user.findMany({});
-
-    return result;
-}
+  return await prisma.user.findMany({});
+};
 
 export const UserService = {
-    create, profile, getAll
-}
+  create,
+  profile,
+  getAll,
+};
