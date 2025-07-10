@@ -25,16 +25,16 @@ model User {
 
 model Category {
   id      String    @id @default(uuid())
-  name    String    @unique
-  Image   String
-  Product Product[]
+  title    String    @unique
+  image   String
+  products Product[]
 }
 
 model Product {
   id          String @id @default(uuid())
   category_id String
 
-  name          String
+  title         String
   price         String
   status        String
   product_code  String
@@ -42,268 +42,299 @@ model Product {
   key_features  String
   image         String
   warranty      String         @default("No Warranty")
-  Specification Specification?
 
+
+  Specification Specification?
   category Category @relation(fields: [category_id], references: [id])
 
   @@map("products")
 }
 
 model Specification {
-  id         String @id @default(uuid())
-  product_id String @unique
+   id         String @id @default(uuid())
+   product_id String @unique
 
-  product Product @relation(fields: [product_id], references: [id])
-
-  display              Display?
-  processor            Processor?
-  audio                Audio?
-  connectivity         Connectivity?
-  power                Power?
-  memory               Memory?
-  storage              Storage?
-  graphics             Graphics?
-  keyboard             Keyboard?
-  camera               Camera?
-  portsSlots           PortsSlots?
-  security             Security?
-  physicalSpecificaion PhysicalSpecificaion?
-  rearCamera           RearCamera?
-  frontCamera          FrontCamera?
-  networkConnectivity  NetworkConnectivity?
-  os                   Os?
-
-  @@map("specification")
+   processor            Json?
+   display              Json?
+   audio                Json?
+   connectivity         Json?
+   power                Json?
+   memory               Json?
+   storage              Json?
+   graphics               Json?
+   keyboard             Json?
+   camera               Json?
+   portsSlots           Json?
+   security             Json?
+   physicalSpecificaion Json?
+   rearCamera           Json?
+   frontCamera          Json?
+   networkConnectivity  Json?
+   os            Json?
+   product Product @relation(fields: [product_id], references: [id])
+   
 }
 
-model Display {
-  id               String @id @default(uuid())
-  specification_id String @unique
 
-  Size         String
-  Type         String
-  Resolution   String
-  Touch_Screen String
-  Refresh_Rate String
-  Features     String
 
-  specification Specification @relation(fields: [specification_id], references: [id])
-}
 
-model Processor {
-  id String @id @default(uuid())
 
-  Brand      String
-  Model      String
-  Generation String
-  Frequency  String
-  Core       String
-  Thread     String
-  Cpu_cache  String
 
-  specification_id String @unique
+// model Specification {
+//   id         String @id @default(uuid())
+//   product_id String @unique
 
-  specification Specification @relation(fields: [specification_id], references: [id])
+//   product Product @relation(fields: [product_id], references: [id])
 
-  @@map("processor")
-}
+//   display              Display?
+//   processor            Processor?
+//   audio                Audio?
+//   connectivity         Connectivity?
+//   power                Power?
+//   memory               Memory?
+//   storage              Storage?
+//   graphics             Graphics?
+//   keyboard             Keyboard?
+//   camera               Camera?
+//   portsSlots           PortsSlots?
+//   security             Security?
+//   physicalSpecificaion PhysicalSpecificaion?
+//   rearCamera           RearCamera?
+//   frontCamera          FrontCamera?
+//   networkConnectivity  NetworkConnectivity?
+//   os                   Os?
 
-model Audio {
-  id              String @id @default(uuid())
-  Speaker         String
-  Speaker_Details String
+//   @@map("specification")
+// }
 
-  specification_id String        @unique
-  specification    Specification @relation(fields: [specification_id], references: [id])
+// model Display {
+//   id               String @id @default(uuid())
+//   specification_id String @unique
 
-  @@map("audio")
-}
+//   Size         String
+//   Type         String
+//   Resolution   String
+//   Touch_Screen String
+//   Refresh_Rate String
+//   Features     String
 
-model Connectivity {
-  id           String @id @default(uuid())
-  Display_Port String
-  HDMI         String
+//   specification Specification @relation(fields: [specification_id], references: [id])
+// }
 
-  specification_id String        @unique
-  specification    Specification @relation(fields: [specification_id], references: [id])
+// model Processor {
+//   id String @id @default(uuid())
 
-  @@map("connectivity")
-}
+//   Brand      String
+//   Model      String
+//   Generation String
+//   Frequency  String
+//   Core       String
+//   Thread     String
+//   Cpu_cache  String
 
-model Power {
-  id      String @id @default(uuid())
-  Type    String
-  Voltage String
+//   specification_id String @unique
 
-  specification_id String        @unique
-  specification    Specification @relation(fields: [specification_id], references: [id])
+//   specification Specification @relation(fields: [specification_id], references: [id])
 
-  @@map("power")
-}
+//   @@map("processor")
+// }
 
-model Memory {
-  id String @id @default(uuid())
+// model Audio {
+//   id              String @id @default(uuid())
+//   Speaker         String
+//   Speaker_Details String
 
-  RAM              String
-  RAM_Type         String
-  Removable        String
-  Total_Ram_Slot   String
-  Max_Ram_Capacity String
+//   specification_id String        @unique
+//   specification    Specification @relation(fields: [specification_id], references: [id])
 
-  specification_id String        @unique
-  specification    Specification @relation(fields: [specification_id], references: [id])
+//   @@map("audio")
+// }
 
-  @@map("memory")
-}
+// model Connectivity {
+//   id           String @id @default(uuid())
+//   Display_Port String
+//   HDMI         String
 
-model Storage {
-  id String @id @default(uuid())
+//   specification_id String        @unique
+//   specification    Specification @relation(fields: [specification_id], references: [id])
 
-  Storage_Type     String
-  Storage_Capacity String
-  hdd_rpm          String
-  Extra_M2_Slot    String
+//   @@map("connectivity")
+// }
 
-  specification_id String        @unique
-  specification    Specification @relation(fields: [specification_id], references: [id])
+// model Power {
+//   id      String @id @default(uuid())
+//   Type    String
+//   Voltage String
 
-  @@map("storage")
-}
+//   specification_id String        @unique
+//   specification    Specification @relation(fields: [specification_id], references: [id])
 
-model Graphics {
-  id String @id @default(uuid())
+//   @@map("power")
+// }
 
-  Model  String
-  Memory String
+// model Memory {
+//   id String @id @default(uuid())
 
-  specification_id String        @unique
-  specification    Specification @relation(fields: [specification_id], references: [id])
+//   RAM              String
+//   RAM_Type         String
+//   Removable        String
+//   Total_Ram_Slot   String
+//   Max_Ram_Capacity String
 
-  @@map("graphics")
-}
+//   specification_id String        @unique
+//   specification    Specification @relation(fields: [specification_id], references: [id])
 
-model Keyboard {
-  id String @id @default(uuid())
+//   @@map("memory")
+// }
 
-  Type      String
-  Features  String
-  Touch_Pad String
+// model Storage {
+//   id String @id @default(uuid())
 
-  specification_id String        @unique
-  specification    Specification @relation(fields: [specification_id], references: [id])
+//   Storage_Type     String
+//   Storage_Capacity String
+//   hdd_rpm          String
+//   Extra_M2_Slot    String
 
-  @@map("keyboard")
-}
+//   specification_id String        @unique
+//   specification    Specification @relation(fields: [specification_id], references: [id])
 
-model Camera {
-  id String @id @default(uuid())
+//   @@map("storage")
+// }
 
-  Web_Cam       String
-  Speaker       String
-  Microphone    String
-  Audio_Feature String
+// model Graphics {
+//   id String @id @default(uuid())
 
-  specification_id String        @unique
-  specification    Specification @relation(fields: [specification_id], references: [id])
+//   Model  String
+//   Memory String
 
-  @@map("camera")
-}
+//   specification_id String        @unique
+//   specification    Specification @relation(fields: [specification_id], references: [id])
 
-model PortsSlots {
-  id String @id @default(uuid())
+//   @@map("graphics")
+// }
 
-  Optical_Drive String
-  CardReader    String
-  VGA           String
-  Display_Port  String
-  HDMI_Port     String
-  USB_2_Port    String
-  USB_3_Port    String
-  USB_TypeC     String
+// model Keyboard {
+//   id String @id @default(uuid())
 
-  specification_id String        @unique
-  specification    Specification @relation(fields: [specification_id], references: [id])
+//   Type      String
+//   Features  String
+//   Touch_Pad String
 
-  @@map("prots_slots")
-}
+//   specification_id String        @unique
+//   specification    Specification @relation(fields: [specification_id], references: [id])
 
-model Security {
-  id String @id @default(uuid())
+//   @@map("keyboard")
+// }
 
-  Fingerprint_Sensor Boolean
-  Security_Chip      String
+// model Camera {
+//   id String @id @default(uuid())
 
-  specification_id String        @unique
-  specification    Specification @relation(fields: [specification_id], references: [id])
+//   Web_Cam       String
+//   Speaker       String
+//   Microphone    String
+//   Audio_Feature String
 
-  @@map("security")
-}
+//   specification_id String        @unique
+//   specification    Specification @relation(fields: [specification_id], references: [id])
 
-model PhysicalSpecificaion {
-  id            Int    @id @default(autoincrement())
-  Color         String
-  Dimensions    String
-  Weight        String
-  Body_Material String
+//   @@map("camera")
+// }
 
-  specification_id String        @unique
-  specification    Specification @relation(fields: [specification_id], references: [id])
+// model PortsSlots {
+//   id String @id @default(uuid())
 
-  @@map("physical_specificaion")
-}
+//   Optical_Drive String
+//   CardReader    String
+//   VGA           String
+//   Display_Port  String
+//   HDMI_Port     String
+//   USB_2_Port    String
+//   USB_3_Port    String
+//   USB_TypeC     String
 
-model RearCamera {
-  id             Int    @id @default(autoincrement())
-  Resolution     String
-  Feature        String
-  VideoRecording String
+//   specification_id String        @unique
+//   specification    Specification @relation(fields: [specification_id], references: [id])
 
-  specification_id String        @unique
-  specification    Specification @relation(fields: [specification_id], references: [id])
+//   @@map("prots_slots")
+// }
 
-  @@map("rear_camera")
-}
+// model Security {
+//   id String @id @default(uuid())
 
-model FrontCamera {
-  id String @id @default(uuid())
+//   Fingerprint_Sensor Boolean
+//   Security_Chip      String
 
-  Resolution     String
-  Feature        String
-  VideoRecording String
+//   specification_id String        @unique
+//   specification    Specification @relation(fields: [specification_id], references: [id])
 
-  specification_id String        @unique
-  specification    Specification @relation(fields: [specification_id], references: [id])
+//   @@map("security")
+// }
 
-  @@map("fornt_camera")
-}
+// model PhysicalSpecificaion {
+//   id            Int    @id @default(autoincrement())
+//   Color         String
+//   Dimensions    String
+//   Weight        String
+//   Body_Material String
 
-model NetworkConnectivity {
-  id String @id @default(uuid())
+//   specification_id String        @unique
+//   specification    Specification @relation(fields: [specification_id], references: [id])
 
-  SIM        String
-  Network    String
-  Wifi       String
-  Bluetooth  String
-  Gps        String
-  Nfc        String
-  USB        String
-  otg        String
-  Audio_Jack String
+//   @@map("physical_specificaion")
+// }
 
-  specification_id String        @unique
-  specification    Specification @relation(fields: [specification_id], references: [id])
+// model RearCamera {
+//   id             Int    @id @default(autoincrement())
+//   Resolution     String
+//   Feature        String
+//   VideoRecording String
 
-  @@map("network_connectivity")
-}
+//   specification_id String        @unique
+//   specification    Specification @relation(fields: [specification_id], references: [id])
 
-model Os {
-  id String @id @default(uuid())
+//   @@map("rear_camera")
+// }
 
-  Os_System  String
-  Upgradable String
+// model FrontCamera {
+//   id String @id @default(uuid())
 
-  specification_id String        @unique
-  specification    Specification @relation(fields: [specification_id], references: [id])
+//   Resolution     String
+//   Feature        String
+//   VideoRecording String
 
-  @@map("os")
-}
+//   specification_id String        @unique
+//   specification    Specification @relation(fields: [specification_id], references: [id])
+
+//   @@map("fornt_camera")
+// }
+
+// model NetworkConnectivity {
+//   id String @id @default(uuid())
+
+//   SIM        String
+//   Network    String
+//   Wifi       String
+//   Bluetooth  String
+//   Gps        String
+//   Nfc        String
+//   USB        String
+//   otg        String
+//   Audio_Jack String
+
+//   specification_id String        @unique
+//   specification    Specification @relation(fields: [specification_id], references: [id])
+
+//   @@map("network_connectivity")
+// }
+
+// model Os {
+//   id String @id @default(uuid())
+
+//   Os_System  String
+//   Upgradable String
+
+//   specification_id String        @unique
+//   specification    Specification @relation(fields: [specification_id], references: [id])
+
+//   @@map("os")
+// }
