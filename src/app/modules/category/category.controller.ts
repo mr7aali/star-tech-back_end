@@ -17,7 +17,7 @@ const create = catchAsync(async (req: Request, res: Response) => {
 });
 const update = catchAsync(async (req: Request, res: Response) => {
   const data = req.body;
-  const id = req.params.id;
+  const { id } = req.params;
   const result = await CatagoryService.update({ id, data });
 
   sendResponse<Category>(res, {
@@ -38,7 +38,7 @@ const getAll = catchAsync(async (req: Request, res: Response) => {
   });
 });
 const getSingle = catchAsync(async (req: Request, res: Response) => {
-  const id = req.params.id;
+  const { id } = req.params;
 
   const result = await CatagoryService.getSingle(id);
 
@@ -50,7 +50,7 @@ const getSingle = catchAsync(async (req: Request, res: Response) => {
   });
 });
 const deleteCategory = catchAsync(async (req: Request, res: Response) => {
-  const id = req.params.id;
+  const { id } = req.params;
   const result = await CatagoryService.deleteCategory(id);
 
   sendResponse<Category>(res, {
