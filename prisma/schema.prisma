@@ -61,7 +61,7 @@ model Specification {
    power                Json?
    memory               Json?
    storage              Json?
-   graphics               Json?
+   graphics             Json?
    keyboard             Json?
    camera               Json?
    portsSlots           Json?
@@ -70,7 +70,7 @@ model Specification {
    rearCamera           Json?
    frontCamera          Json?
    networkConnectivity  Json?
-   os            Json?
+   os                   Json?
    product Product @relation(fields: [product_id], references: [id])
    
 }
